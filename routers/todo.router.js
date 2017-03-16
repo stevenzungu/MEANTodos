@@ -1,13 +1,13 @@
 
 var express = require('express');
-var todosRouter = express.Router();
-var Todos = require('../models/todos.model');
+var router = express.Router();
+var Todo = require('../models/todo.model');
 
 
 
 //GET /todos
-todosRouter.get('/todos', function(req, res){
-  Todos.find({}, function(err, documents){
+router.get('/todos', function(req, res){
+  Todo.find({}, function(err, documents){
     if(err){
       res.status(500).json({
         msg: err
@@ -22,8 +22,8 @@ todosRouter.get('/todos', function(req, res){
 });
 
 //GET /todos/:id
-todosRouter.get('/todos/:id', function(req, res){
-  Todos.find({_id: req.params.id}, function(err, documents){
+router.get('/todos/:id', function(req, res){
+  Todo.find({_id: req.params.id}, function(err, documents){
     if(err){
       res.status(500).json({
        msg: err
@@ -39,9 +39,9 @@ todosRouter.get('/todos/:id', function(req, res){
 
 
 //POST /todos
-todosRouter.post('/todos', function(req, res){
-  var todos = new Todos(req.body);
-  todos.save(function(err, document){
+router.post('/todos', function(req, res){
+  var todo = new Todo(req.body);
+  todo.save(function(err){
     if(err){
       res.status(500).json({
         msg: err
@@ -56,8 +56,8 @@ todosRouter.post('/todos', function(req, res){
 
 
 //PUT /todos/:id
-todosRouter.put('/todos/:id', function(req, res){
-  Todos.findOneAndUpdate({_id: req.params.id}, req.body, function(err, document){
+router.put('/todos/:id', function(req, res){
+  Todo.findOneAndUpdate({_id: req.params.id}, req.body, function(err, document){
     if(err){
       res.status(500).json({
         msg: err
@@ -72,8 +72,8 @@ todosRouter.put('/todos/:id', function(req, res){
 
 
 //DELETE /todos/:id
-todosRouter.delete('/todos/:id', function(req, res){
-  Todos.remove({_id: req.params.id}, function(err, document){
+router.delete('/todos/:id', function(req, res){
+  Todo.remove({_id: req.params.id}, function(err, document){
     if(err){
       res.status(500).json({
         msg:err
@@ -86,4 +86,4 @@ todosRouter.delete('/todos/:id', function(req, res){
   });
 });
 
-module.exports = todosRouter;
+module.exports = router;
