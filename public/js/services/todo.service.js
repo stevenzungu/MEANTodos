@@ -18,6 +18,9 @@
     function deleteTodo(todo){
       return $http.delete(`${baseURL}/${todo._id}`);
     }
+    function update(todo){
+      return $http.put(`${baseURL}/${todo.id}`, todo);
+    }
     return {
       getAll: getAll,
       create: create,
