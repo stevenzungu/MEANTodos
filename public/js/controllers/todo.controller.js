@@ -1,57 +1,56 @@
 (function(){
   angular.module('MEANTodos') //getter syntax
-  .controller('TodoController', TodoController);
 
-  TodoController.$inject = ['$scope', 'TodoService'];
+    .controller('TodoController', TodoController);
 
-  function TodoController($scope, TodoService){
-    $scope.todos = [];
-    $scope.newTodo = {};
-    $scope.addTodo = addTodo;
-    $scope.deleteTodo = deleteTodo;
-    $scope.update = update;
-    $scope.edit = edit;
-    getTodos();
+    TodoController.$inject = ['$scope', 'TodoService'];
 
-    function edit(todo){
-      console.log('editing');
-      todo.edit = true;
-    }
+    function TodoController($scope, TodoService){
+      $scope.todos = [];
+      $scope.newTodo = {};
+      $scope.addTodo = addTodo;
+      $scope.deleteTodo = deleteTodo;
+      $scope.update = update;
+      $scope.edit = edit;
+
+      getTodos();
+
+      $scope.$watch(function watcher(){
+        return TodoService.fetch();
+      },
+      function onChange(){
+        $scope.todos = TodoService.fetch();
+      });
+
+      function edit(todo){
+        console.log('editing...');
+        todo.edit = true;
+      }
+
 
       function update(todo){
         console.log('updating...');
         todo.edit = false;
-        TodoService.update(todo)
-                    .then(function(response){
-                      getTodos();
-                    });
+
+        TodoService.update(todo);
       }
 
-    function deleteTodo(todo){
-      TodoService.delete(todo)
-                  .then(function(response){
-                    getTodos();
-                  });
-    }
+      function deleteTodo(todo){
+        TodoService.delete(todo);
+      }
 
-    function addTodo(newTodo){
-      console.log('Creating a new todo...');
-      TodoService.create(newTodo)
+      function addTodo(newTodo){
+        console.log('Creating a new todo...');
+        TodoService.create(newTodo)
                   .then(function(response){
-                    getTodos();
                     $scope.newTodo = {};
                   });
-    }
-    function getTodos(){
-      console.log($scope.todos);
-      console.log('Getting the todos...');
-      TodoService.getAll()
-                .then(function(response){
-                  $scope.todos = response.data.todos;
+      }
 
-              });
-    }
-
+      function getTodos(){
+        console.log('Getting the todos...');
+        TodoService.getAll();
+      }
 
     }
 
